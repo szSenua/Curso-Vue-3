@@ -110,6 +110,7 @@ const app = Vue.createApp({
         },
 
 
+        //Averigua si un elemento está en favoritos y aplica una clase
         checkFavorite(id) {
             return this.result?.login === id
         },

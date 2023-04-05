@@ -18,7 +18,10 @@
             <transition-group name="list">
             <!-- Con v-for iteramos sobre una colección, en este caso recorremos el map favorites y repetimos el div donde se halla el for con todo su contenido
             por cada favorite que encuentre-->
-            <div class="favorite" v-for="favorite in allFavorites" key="favorite"> <!-- usamos una propiedad computada por claridad-->
+            <div 
+            class="favorite" 
+            :class="{ 'favorite--selected':checkFavorite(favorite.login)}"
+            v-for="favorite in allFavorites" key="favorite"> <!-- usamos una propiedad computada por claridad-->
                 <a @click.prevent="showFavorite(favorite)" href="#" target="_blank"> <!--el favorite que le pasamos, viene del v-for -->
                     <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
                 </a>
