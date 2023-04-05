@@ -16,6 +16,11 @@ const app = Vue.createApp({
     computed: {
         isFavorite(){
             return this.favorites.has(this.result.id)
+        },
+
+        //función para que únicamente nos devuelva el valor del mapa
+        allFavorites(){
+            return Array.from(this.favorites.values())
         }
     },
 
