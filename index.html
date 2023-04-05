@@ -24,6 +24,7 @@
             <form class="search" v-on:submit.prevent="doSearch"> <!--Cuando se desencadene el evento submit llamamos a doSearch -->
                 <!--El prevent evita que recargue la página, que sería el comportamiento por defecto de un submit-->
                 <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
+                <!-- Con v-model añadimos una propiedad del modelo dentro de la instancia de vue -->
                 <input type="submit" class="search__submit" value="Search">
             </form>
 
