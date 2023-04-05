@@ -49,11 +49,17 @@ const app = Vue.createApp({
         addFavorite() {
             this.favorites.set(this.result.id, this.result)
             //Añadimos como key el id del ususario y como value, el objeto con todos los parámetros del user (Map)
+            this.updateStorage()
         },
 
         removeFavorite() {
             this.favorites.delete(this.result.id)
             //Borramos por el id
+            this.updateStorage()
+        },
+
+        updateStorage(){
+            window.localStorage.setItem('favorites', JSON.stringify(this.allFavorites))
         }
     }
 })
