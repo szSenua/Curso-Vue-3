@@ -6,17 +6,32 @@ const API = "https://api.github.com/users/"
 const app = Vue.createApp({
     data() {
         return {
-            search: ''
+            search: null,
+            result: null,
+            error: null
         }
     },
 
     methods: {
         async doSearch(){
-            //Reactividad en dos sentidos: podemos modificar el valor de la variable search desde el cuadro de búsqueda o desde la devtools de vue
+            this.result = this.error = null
+            try {
+                //Reactividad en dos sentidos: podemos modificar el valor de la variable search desde el cuadro de búsqueda o desde la devtools de vue
+                //con fetch solicitamos datos via http (Axios) y sustituye a XMLHttpRequest
             const response = await fetch(API + this.search)
+
+            if(!response.ok) throw new Error('User Not Found') //el ok lo sacamos de la respuesta, será false si el usuario no existe
+            //console.log(response) de aquí sacamos la propiedad ok en false cuando se produce un error de no encontrado.
             //la respuesta la tenemos que interpretar en formato json
             const data = await response.json() 
             console.log(data)
+            this.result = true
+
+            }catch(error){
+                this.error = error
+            } finally{
+                this.search = null //limpiamos la caja de búsqueda
+            }
         }
     }
 })
