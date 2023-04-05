@@ -71,6 +71,11 @@ const app = Vue.createApp({
             this.updateStorage()
         },
 
+        showFavorite(favorite){
+            this.result = favorite
+
+        },
+
         updateStorage(){
             //convertimos la estructura nativa en un string JSON y lo guardamos en el local storage del navegador (persistencia)
             window.localStorage.setItem('favorites', JSON.stringify(this.allFavorites))
