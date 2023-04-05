@@ -18,7 +18,8 @@ const app = Vue.createApp({
         const savedFavorites = JSON.parse(window.localStorage.getItem('favorites'))
 
         //si savedFavorites contiene algo, creamos un nuevo mapa en el que devolvemos la id del usuario como key y todo lo demas como value.
-        if(savedFavorites.length){
+        if(savedFavorites?.length){
+            //La interrogación indica si existe o no la propiedad y en caso de que no, no arrojará un error sino que retornará un valor nulo.
             const favorites = new Map(savedFavorites.map(favorite => [favorite.id, favorite]))
             //asociamos la constante con la propiedad de la instancia.
             this.favorites = favorites

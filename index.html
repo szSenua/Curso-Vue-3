@@ -13,15 +13,19 @@
 <body>
     <div id="app">
         <!-- Favorites -->
+        
         <div class="favorites">
+            <transition-group name="list">
             <!-- Con v-for iteramos sobre una colección, en este caso recorremos el map favorites y repetimos el div donde se halla el for con todo su contenido
             por cada favorite que encuentre-->
-            <div class="favorite" v-for="favorite in allFavorites"> <!-- usamos una propiedad computada por claridad-->
+            <div class="favorite" v-for="favorite in allFavorites" key="favorite"> <!-- usamos una propiedad computada por claridad-->
                 <a @click.prevent="showFavorite(favorite)" href="#" target="_blank"> <!--el favorite que le pasamos, viene del v-for -->
                     <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
                 </a>
             </div>
+        </transition-group>
         </div>
+    
 
         <!-- Content -->
         <article class="content">
@@ -39,6 +43,7 @@
             <!--Podríamos usar v-if o v-show, la diferencia es que v-show va a mostrar el elemento en el DOM tanto si el resultado de la variable es true o false
             En contraparte, v-if sólo lo muestra cuando el resultado es verdadero.
             DOM -> Document Object Model-->
+            <Transition>
             <div class="result" v-if="result">
                 <!-- map.has(key)-->
                 <!--Las propiedades computadas sirven para que no apliquemos lógicas inline, en este caso comparamos si es favorito o no el resultado -->
@@ -52,13 +57,14 @@
                     <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
                 </p>
             </div>
-            <!--v-else debe colocarse inmeditamente después de un v-if-->
-            <p v-else>Waiting for search...</p>
+        </Transition>
+           
             
             <!-- Error -->
             <div class="result__error" v-if="error">{{ error }}</div>
         </article>
     </div>
+
 
     <!-- Imported JS file-->
     <script src="js/main.js"></script>
