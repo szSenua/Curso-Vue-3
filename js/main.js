@@ -12,6 +12,19 @@ const app = Vue.createApp({
             favorites: new Map()
         }
     },
+
+    //traemos la string con la información de los favoritos que hemos guardado, lo parseamos de una String a un objeto 
+    created() {
+        const savedFavorites = JSON.parse(window.localStorage.getItem('favorites'))
+
+        //si savedFavorites contiene algo, creamos un nuevo mapa en el que devolvemos la id del usuario como key y todo lo demas como value.
+        if(savedFavorites.length){
+            const favorites = new Map(savedFavorites.map(favorite => [favorite.id, favorite]))
+            //asociamos la constante con la propiedad de la instancia.
+            this.favorites = favorites
+        }
+    },
+
     //propiedades computadas
     computed: {
         isFavorite(){
@@ -59,6 +72,7 @@ const app = Vue.createApp({
         },
 
         updateStorage(){
+            //convertimos la estructura nativa en un string JSON y lo guardamos en el local storage del navegador (persistencia)
             window.localStorage.setItem('favorites', JSON.stringify(this.allFavorites))
         }
     }
