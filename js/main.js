@@ -25,7 +25,7 @@ const app = Vue.createApp({
             //la respuesta la tenemos que interpretar en formato json
             const data = await response.json() 
             console.log(data)
-            this.result = true
+            this.result = data
 
             }catch(error){
                 this.error = error
