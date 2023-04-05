@@ -6,13 +6,14 @@ const API = "https://api.github.com/users/"
 const app = Vue.createApp({
     data() {
         return {
-            message: 'Hello Vue',
+            search: ''
         }
     },
 
     methods: {
         async doSearch(){
-            const response = await fetch(API + 'szSenua')
+            //Reactividad en dos sentidos: podemos modificar el valor de la variable search desde el cuadro de búsqueda o desde la devtools de vue
+            const response = await fetch(API + this.search)
             //la respuesta la tenemos que interpretar en formato json
             const data = await response.json() 
             console.log(data)
