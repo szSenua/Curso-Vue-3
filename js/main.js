@@ -1,6 +1,6 @@
 const API = "https://api.github.com/users/"
 
-
+const requestMaxTimeMs = 3000
 
 //instancia de Vue
 const app = Vue.createApp({
@@ -20,7 +20,7 @@ const app = Vue.createApp({
         //si savedFavorites contiene algo, creamos un nuevo mapa en el que devolvemos la id del usuario como key y todo lo demas como value.
         if(savedFavorites?.length){
             //La interrogación indica si existe o no la propiedad y en caso de que no, no arrojará un error sino que retornará un valor nulo.
-            const favorites = new Map(savedFavorites.map(favorite => [favorite.id, favorite]))
+            const favorites = new Map(savedFavorites.map(favorite => [favorite.login, favorite]))
             //asociamos la constante con la propiedad de la instancia.
             this.favorites = favorites
         }
@@ -29,7 +29,7 @@ const app = Vue.createApp({
     //propiedades computadas
     computed: {
         isFavorite(){
-            return this.favorites.has(this.result.id)
+            return this.favorites.has(this.result.login)
         },
 
         //función para que únicamente nos devuelva el valor del mapa
@@ -41,7 +41,28 @@ const app = Vue.createApp({
     methods: {
         async doSearch(){
             this.result = this.error = null
+
+            //Esto lo hacemos para que no esté constantemente haciendo la misma petición http cuando nos encontramos como favoritos y nos volvemos a buscar.
+            const foundInFavorites = this.favorites.get(this.search)
+
+            const shouldRequestAgain = (() => {
+                if(!!foundInFavorites){
+                    const { lastRequestTime } = foundInFavorites
+                    const now = Date.now()
+                    return (now - lastRequestTime) > requestMaxTimeMs
+                }
+                return false
+            })() //IIFE
+
+            //la doble interrogación fuerza a la constante a ser evaluada como boolean, un casteo a boolean.
+            if(!!foundInFavorites && !shouldRequestAgain) {
+                console.log('Found and we use the cached version')
+                return this.result = foundInFavorites
+            }
+                //si obtenemos un return, salimos de la función y no usamos el try/catch
+
             try {
+                console.log('Not found or cached version is too old')
                 //Reactividad en dos sentidos: podemos modificar el valor de la variable search desde el cuadro de búsqueda o desde la devtools de vue
                 //con fetch solicitamos datos via http (Axios) y sustituye a XMLHttpRequest
             const response = await fetch(API + this.search)
@@ -52,7 +73,7 @@ const app = Vue.createApp({
             const data = await response.json() 
             console.log(data)
             this.result = data
-
+            foundInFavorites.lastRequestTime = Date.now()
             }catch(error){
                 this.error = error
             } finally{
@@ -61,14 +82,17 @@ const app = Vue.createApp({
         },
 
         addFavorite() {
-            this.favorites.set(this.result.id, this.result)
-            //Añadimos como key el id del ususario y como value, el objeto con todos los parámetros del user (Map)
+            this.result.lastRequestTime = Date.now() //existe un problema con la no repetición de peticiones http, y es que si hacemos cambios en nuestra cuenta
+            //como avatar, descripción, etc, nunca obtendremos esos datos actualizados. Así que vamos a generar un temporizador y se hará una nueva petición pasado
+            //ese tiempo.
+            this.favorites.set(this.result.login, this.result)
+            //Añadimos como key el login del ususario y como value, el objeto con todos los parámetros del user (Map)
             this.updateStorage()
         },
 
         removeFavorite() {
-            this.favorites.delete(this.result.id)
-            //Borramos por el id
+            this.favorites.delete(this.result.login)
+            //Borramos por el login
             this.updateStorage()
         },
 
