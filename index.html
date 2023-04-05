@@ -33,6 +33,7 @@
             En contraparte, v-if sólo lo muestra cuando el resultado es verdadero.
             DOM -> Document Object Model-->
             <div class="result" v-if="result">
+                <a href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
                 <h2 class="result__name">{{ result.name }}</h2>
                 <!-- Dos formas de usa v-bind -->
                 <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">
@@ -52,9 +53,6 @@
     <!-- Imported JS file-->
     <script src="js/main.js"></script>
 
-    <script>
-    const mountedApp = app.mount('#app')
-    </script>
 </body>
 
 </html>

@@ -8,7 +8,8 @@ const app = Vue.createApp({
         return {
             search: null,
             result: null,
-            error: null
+            error: null,
+            favorites: new Map()
         }
     },
 
@@ -32,7 +33,13 @@ const app = Vue.createApp({
             } finally{
                 this.search = null //limpiamos la caja de búsqueda
             }
+        },
+
+        addFavorite() {
+            this.favorites.set(this.result.id, this.result)
         }
     }
 })
+
+const mountedApp = app.mount('#app')
 

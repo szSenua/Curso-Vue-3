@@ -47,7 +47,7 @@ body {
 /* Result */
 .result {
   position: relative;
-  background-color: purple;
+  background-color: #311557;
   border-radius: 0.3rem;
   box-shadow: 2px 2px 3px gray;
   color: white;
