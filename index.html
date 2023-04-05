@@ -33,7 +33,10 @@
             En contraparte, v-if sólo lo muestra cuando el resultado es verdadero.
             DOM -> Document Object Model-->
             <div class="result" v-if="result">
-                <a href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
+                <!-- map.has(key)-->
+                <!--Las propiedades computadas sirven para que no apliquemos lógicas inline, en este caso comparamos si es favorito o no el resultado -->
+                <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite ❌</a>
+                <a v-else href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
                 <h2 class="result__name">{{ result.name }}</h2>
                 <!-- Dos formas de usa v-bind -->
                 <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">

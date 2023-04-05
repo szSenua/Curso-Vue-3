@@ -12,6 +12,12 @@ const app = Vue.createApp({
             favorites: new Map()
         }
     },
+    //propiedades computadas
+    computed: {
+        isFavorite(){
+            return this.favorites.has(this.result.id)
+        }
+    },
 
     methods: {
         async doSearch(){
@@ -37,6 +43,12 @@ const app = Vue.createApp({
 
         addFavorite() {
             this.favorites.set(this.result.id, this.result)
+            //Añadimos como key el id del ususario y como value, el objeto con todos los parámetros del user (Map)
+        },
+
+        removeFavorite() {
+            this.favorites.delete(this.result.id)
+            //Borramos por el id
         }
     }
 })
