@@ -13,29 +13,29 @@
 <body>
     <div id="app">
         <!-- Favorites -->
-        
+
         <div class="favorites">
             <transition-group name="list">
-            <!-- Con v-for iteramos sobre una colección, en este caso recorremos el map favorites y repetimos el div donde se halla el for con todo su contenido
+                <!-- Con v-for iteramos sobre una colección, en este caso recorremos el map favorites y repetimos el div donde se halla el for con todo su contenido
             por cada favorite que encuentre-->
-            <div 
-            class="favorite" 
-            :class="{ 'favorite--selected':checkFavorite(favorite.login)}"
-            v-for="favorite in allFavorites" key="favorite"> <!-- usamos una propiedad computada por claridad-->
-                <a @click.prevent="showFavorite(favorite)" href="#" target="_blank"> <!--el favorite que le pasamos, viene del v-for -->
-                    <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
-                </a>
-            </div>
-        </transition-group>
+                <div class="favorite" :class="{ 'favorite--selected':checkFavorite(favorite.login)}"
+                    v-for="favorite in allFavorites" key="favorite"> <!-- usamos una propiedad computada por claridad-->
+                    <a @click.prevent="showFavorite(favorite)" href="#" target="_blank">
+                        <!--el favorite que le pasamos, viene del v-for -->
+                        <img :src="favorite.avatar_url" :alt="favorite.name" class="favorite__avatar">
+                    </a>
+                </div>
+            </transition-group>
         </div>
-    
+
 
         <!-- Content -->
         <article class="content">
             <h1 class="content__title">Search GitHub Users</h1>
 
             <!-- Search -->
-            <form class="search" v-on:submit.prevent="doSearch"> <!--Cuando se desencadene el evento submit llamamos a doSearch -->
+            <form class="search" v-on:submit.prevent="doSearch">
+                <!--Cuando se desencadene el evento submit llamamos a doSearch -->
                 <!--El prevent evita que recargue la página, que sería el comportamiento por defecto de un submit-->
                 <input v-model="search" type="text" class="search__input" required placeholder="Search GitHub users">
                 <!-- Con v-model añadimos una propiedad del modelo dentro de la instancia de vue -->
@@ -46,23 +46,19 @@
             <!--Podríamos usar v-if o v-show, la diferencia es que v-show va a mostrar el elemento en el DOM tanto si el resultado de la variable es true o false
             En contraparte, v-if sólo lo muestra cuando el resultado es verdadero.
             DOM -> Document Object Model-->
+
+            <!-- Transformamos esta sección en un componente AppProfile.js -->
             <Transition>
-            <div class="result" v-if="result">
-                <!-- map.has(key)-->
-                <!--Las propiedades computadas sirven para que no apliquemos lógicas inline, en este caso comparamos si es favorito o no el resultado -->
-                <a v-if="isFavorite" href="#" class="result__toggle-favorite" @click="removeFavorite">Remove Favorite ❌</a>
-                <a v-else href="#" class="result__toggle-favorite" @click="addFavorite">Add Favorite ⭐️</a>
-                <h2 class="result__name">{{ result.name }}</h2>
-                <!-- Dos formas de usa v-bind -->
-                <img v-bind:src="result.avatar_url" :alt="result.name" class="result__avatar">
-                <p class="result__bio">{{ result.bio }}
-                    <br>
-                    <a v-bind:href="result.blog" target="_blank" class="result__blog">{{ result.blog }}</a>
-                </p>
-            </div>
-        </Transition>
-           
-            
+                <app-profile 
+                v-if="result" 
+                :result="result"
+                :is-favorite="isFavorite"
+                @add-favorite="addFavorite"
+                @remove-favorite="removeFavorite"/>
+                <!--Escuchamos los métodos-->
+            </Transition>
+
+
             <!-- Error -->
             <div class="result__error" v-if="error">{{ error }}</div>
         </article>
@@ -71,6 +67,10 @@
 
     <!-- Imported JS file-->
     <script src="js/main.js"></script>
+    <!-- Importamos el nuevo componente -->
+    <script src="js/components/AppProfile.js"></script>
+    
+    <script>const mountedApp = app.mount('#app')</script>
 
 </body>
 
